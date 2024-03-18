@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace SGS.InputSystem
 {
-    public class PlayerInputs : MonoBehaviour
+    public class InputsHandler : MonoBehaviour
     {
         public FrameInput FrameInput { get; private set; }
         private PlayerInputAction _playerInputActions;

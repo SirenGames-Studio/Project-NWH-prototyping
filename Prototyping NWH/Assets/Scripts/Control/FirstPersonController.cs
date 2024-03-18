@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using SGS.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace SGS.Controls
 {
+    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(PlayerInput))]
     public class FirstPersonController : MonoBehaviour
     {
         [Header("Player")]
@@ -27,7 +30,7 @@ namespace SGS.Controls
         #region Other_Settings
         private CharacterController _playerController;
         [SerializeField]
-        private PlayerInputs _playerInput;
+        private InputsHandler _playerInput;
         private FrameInput _frameInput;
 
         #endregion
@@ -37,7 +40,7 @@ namespace SGS.Controls
 
         private void Awake()
         {
-           // _playerInput = GetComponent<PlayerInputs>();
+            _playerInput = GetComponent<InputsHandler>();
             _playerController = GetComponent<CharacterController>();
         }
 
