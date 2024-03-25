@@ -20,6 +20,7 @@ namespace SGS.Controls
         [SerializeField]
         float xRotation = 0f;
 
+        [Header("Handling Inputs")]
         public PlayerInput PlayerInput;
         public InputsHandler PlayerInputHandler;
         private FrameInput _frameInput;
@@ -106,17 +107,15 @@ namespace SGS.Controls
                 //Don't multiply mouse input by Time.deltaTime
               float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 				
-                _cinemachineTargetPitch += _frameInput.CameraLook.y * RotationSpeed * deltaTimeMultiplier;
-                _rotationVelocity = _frameInput.CameraLook.x * RotationSpeed * deltaTimeMultiplier;
+              float verticalRotation = _frameInput.CameraLook.y * RotationSpeed * deltaTimeMultiplier;
+              // Update Cinemachine camera target pitch
+              _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch - verticalRotation, BottomClamp, TopClamp);
+              ChinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
-                // clamp our pitch rotation
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-                // Update Cinemachine camera target pitch
-                ChinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-
-                // rotate the player left and right
-                transform.Rotate(Vector3.up * _rotationVelocity);
+              // Calculate horizontal rotation (around the y-axis)
+              float horizontalRotation = _frameInput.CameraLook.x * RotationSpeed * deltaTimeMultiplier;
+              // Rotate the player left and right
+              transform.Rotate(Vector3.up * horizontalRotation);
             }
         }
         
