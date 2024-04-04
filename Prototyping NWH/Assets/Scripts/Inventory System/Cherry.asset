@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b11352306d84074f82e19f53d74d5b0, type: 3}
-  m_Name: Apple
+  m_Name: Cherry
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  icon: {fileID: 0}
+  ItemBehaviour: 2
+  DisplayName: Cherry
+  Description: Cherry for your berry
+  Icon: {fileID: 21300000, guid: 55e29d9a03fe24caba914d7134c713c5, type: 3}
+  DropPrefab: {fileID: 2993810366630589786, guid: ff6b3f4f8990ea442a270d79a4d4560f, type: 3}
+  CanStack: 1
+  MaxStackAmount: 5

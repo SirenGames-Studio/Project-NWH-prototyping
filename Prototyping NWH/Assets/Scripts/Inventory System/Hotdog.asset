@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b11352306d84074f82e19f53d74d5b0, type: 3}
-  m_Name: Apple
+  m_Name: Hotdog
   m_EditorClassIdentifier: 
   ItemBehaviour: 2
-  DisplayName: Apple
-  Description: Appleto Eat!
-  Icon: {fileID: 21300000, guid: 2aa6ab62866ce4439ab7303f7da55e51, type: 3}
-  DropPrefab: {fileID: 8939277615013163547, guid: 4a9730f7e1b59044d9218459b71db3ad, type: 3}
-  CanStack: 1
-  MaxStackAmount: 5
+  DisplayName: Hotdog
+  Description: Hot for your Dog !!
+  Icon: {fileID: 21300000, guid: c2d9e80be85564073abdc0cc14bfe297, type: 3}
+  DropPrefab: {fileID: 1202617880259686824, guid: 8fb8eb197770a2440abe43f65aea7b77, type: 3}
+  CanStack: 0
+  MaxStackAmount: 0

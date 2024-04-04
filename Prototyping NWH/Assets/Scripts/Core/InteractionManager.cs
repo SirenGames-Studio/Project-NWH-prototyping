@@ -62,7 +62,7 @@ public class InteractionManager : MonoBehaviour
 
     private void OnInteractInput()
     {
-        _frameInput = PlayerInputHandler.FrameInput;
+         _frameInput = PlayerInputHandler.FrameInput;
         if (_frameInput.PickUP && _curInteractable != null)
         {
             _curInteractable.OnInteract();
