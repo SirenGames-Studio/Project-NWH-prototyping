@@ -198,6 +198,74 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""1a9c0f36-e5bc-4ba3-8eed-31fd8d14e25c"",
+            ""actions"": [
+                {
+                    ""name"": ""InventoryMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""af6b0835-ca7e-432e-9610-8071cc19694c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""d66d6587-3176-4868-9a1b-7dcc8cd8737c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""JournalSystem"",
+                    ""type"": ""Button"",
+                    ""id"": ""d670c2d7-d7b2-4e91-8432-f8c3e6509a3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""58061fdd-1685-42b9-b5a1-4da961033b79"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse&Keyboard"",
+                    ""action"": ""InventoryMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""604f769f-a13c-40b8-a90b-90b41e7db2e3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""858fa3ab-8f12-4d6e-8548-66f7214501fc"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""JournalSystem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -219,6 +287,11 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
         m_Player_Open = m_Player.FindAction("Open", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_InventoryMenu = m_UI.FindAction("InventoryMenu", throwIfNotFound: true);
+        m_UI_PauseMenu = m_UI.FindAction("PauseMenu", throwIfNotFound: true);
+        m_UI_JournalSystem = m_UI.FindAction("JournalSystem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -346,6 +419,68 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_InventoryMenu;
+    private readonly InputAction m_UI_PauseMenu;
+    private readonly InputAction m_UI_JournalSystem;
+    public struct UIActions
+    {
+        private @PlayerInputAction m_Wrapper;
+        public UIActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InventoryMenu => m_Wrapper.m_UI_InventoryMenu;
+        public InputAction @PauseMenu => m_Wrapper.m_UI_PauseMenu;
+        public InputAction @JournalSystem => m_Wrapper.m_UI_JournalSystem;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @InventoryMenu.started += instance.OnInventoryMenu;
+            @InventoryMenu.performed += instance.OnInventoryMenu;
+            @InventoryMenu.canceled += instance.OnInventoryMenu;
+            @PauseMenu.started += instance.OnPauseMenu;
+            @PauseMenu.performed += instance.OnPauseMenu;
+            @PauseMenu.canceled += instance.OnPauseMenu;
+            @JournalSystem.started += instance.OnJournalSystem;
+            @JournalSystem.performed += instance.OnJournalSystem;
+            @JournalSystem.canceled += instance.OnJournalSystem;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @InventoryMenu.started -= instance.OnInventoryMenu;
+            @InventoryMenu.performed -= instance.OnInventoryMenu;
+            @InventoryMenu.canceled -= instance.OnInventoryMenu;
+            @PauseMenu.started -= instance.OnPauseMenu;
+            @PauseMenu.performed -= instance.OnPauseMenu;
+            @PauseMenu.canceled -= instance.OnPauseMenu;
+            @JournalSystem.started -= instance.OnJournalSystem;
+            @JournalSystem.performed -= instance.OnJournalSystem;
+            @JournalSystem.canceled -= instance.OnJournalSystem;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_MouseKeyboardSchemeIndex = -1;
     public InputControlScheme MouseKeyboardScheme
     {
@@ -370,5 +505,11 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
         void OnOpen(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnInventoryMenu(InputAction.CallbackContext context);
+        void OnPauseMenu(InputAction.CallbackContext context);
+        void OnJournalSystem(InputAction.CallbackContext context);
     }
 }

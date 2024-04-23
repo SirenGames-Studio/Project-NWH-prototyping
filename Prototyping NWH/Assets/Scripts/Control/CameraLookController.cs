@@ -64,6 +64,9 @@ namespace SGS.Controls
 
             }
         }
+
+        [HideInInspector] public bool canLook = true;
+        
         private void Awake()
         {
             if (_mainCamera == null)
@@ -84,7 +87,8 @@ namespace SGS.Controls
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if(canLook == true)
+                CameraRotation();
         }
 
         private void PlayerRotate()
@@ -124,6 +128,12 @@ namespace SGS.Controls
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+
+        public void ToggleCursor(bool toggle)
+        {
+            Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+            canLook = !toggle;
         }
 
     }

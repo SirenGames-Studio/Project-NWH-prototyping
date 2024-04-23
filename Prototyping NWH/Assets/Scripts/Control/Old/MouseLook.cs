@@ -18,24 +18,29 @@ public class MouseLook : MonoBehaviour
 
      private InputsHandler _inputHandler;
     private FrameInput _frameInput;
-
+    public bool canLook = true;
     private void Start() 
     {
-       
-        Cursor.lockState = CursorLockMode.Locked;
         _inputHandler = GetComponentInParent<InputsHandler>();
     }
 
-    private void Update() 
+    private void LateUpdate() 
     {
-        // Check if the mouse is over any UI element
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
+        if(Inventory.Instance.InventoryWindow.activeInHierarchy == true)
+        {
+            canLook = false;
+        }
+        else
+        {
+            canLook = true;
+        }
 
-        PlayerRotate();
+
+        if(canLook == true)
+            CameraLook();
     }
 
-    private void PlayerRotate()
+    private void CameraLook()
     {
         _frameInput = _inputHandler.FrameInput;
         xRotation -= _frameInput.CameraLook.y * mouseSensitivity;
@@ -45,6 +50,6 @@ public class MouseLook : MonoBehaviour
         playerBody.Rotate(Vector3.up*_frameInput.CameraLook.x * mouseSensitivity);
 
     }
-
+    
    
 }

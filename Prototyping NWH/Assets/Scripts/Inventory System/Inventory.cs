@@ -1,16 +1,12 @@
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using SGS.Controls;
 using SGS.Inventory;
 using UnityEngine;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine.Events;
-using Random = System.Random;
+using SGS.Inventory;
+using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
 {
@@ -20,7 +16,7 @@ public class Inventory : MonoBehaviour
     public GameObject InventoryWindow;
     public Transform DropPosition;
 
-    [Header("Selected Item")] private ItemSlot SeletedItem;
+    [Header("Selected Item")] private ItemSlot SelectedItem;
      private int _selectedItemIndex;
     [SerializeField] private TextMeshProUGUI selectedItemName;
     [SerializeField] private TextMeshProUGUI selectedItemDescription;
@@ -34,6 +30,7 @@ public class Inventory : MonoBehaviour
     private int _curEquipIndex;
 
     public FirstPersonController playerController;
+    public MouseLook mouseController;
 
     [Header("Events")] 
     public UnityEvent OnInventoryOpen;
@@ -60,12 +57,10 @@ public class Inventory : MonoBehaviour
             UISlots[x].Index = x;
             UISlots[x].Clear();
         }
+        
+        ClearSelectedItemWindow();
     }
 
-    public void Toggle()
-    {
-        
-    }
 
     public bool IsOpen()
     {
@@ -144,12 +139,40 @@ public class Inventory : MonoBehaviour
 
     public void SelectItem(int index)
     {
+        if(Slots[index].ItemData == null)
+            return;
+
+        SelectedItem = Slots[index];
+        _selectedItemIndex = index;
+
+        selectedItemName.text = SelectedItem.ItemData.DisplayName;
+        selectedItemDescription.text = SelectedItem.ItemData.Description;
+        
+        
+        //set stat value and stat name
+
+        UseButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Consumable);
+        EquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Equipable && !UISlots[index].Equipped);
+        UnEquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Equipable && UISlots[index].Equipped);
+        DropButton.SetActive(true);
+
         
     }
 
     private void ClearSelectedItemWindow()
     {
+        //clear text elements
+        SelectedItem = null;
+        selectedItemName.text = string.Empty;
+        selectedItemDescription.text = string.Empty;
+        selectedItemStatName.text = string.Empty;
+        selectedItemStatValues.text = string.Empty;
         
+        //disable item
+        UseButton.SetActive(false);
+        EquipButton.SetActive(false);
+        UnEquipButton.SetActive(false);
+        DropButton.SetActive(false);
     }
 
     public void OnUseButton()
@@ -169,10 +192,26 @@ public class Inventory : MonoBehaviour
 
     public void OnDropButton()
     {
-        
+        ThrowItem(SelectedItem.ItemData);
+        RemoveSelectedItem();
     }
 
     public void RemoveSelectedItem()
+    {
+        SelectedItem.Quantity--;
+        if(SelectedItem.Quantity == 0)
+        {
+            if (UISlots[_selectedItemIndex].Equipped == true)
+                    UnEquip(_selectedItemIndex);
+
+            SelectedItem.ItemData = null;
+            ClearSelectedItemWindow();
+        }
+
+        UpdateUI(); 
+    }
+
+    private void UnEquip(int selectedItemIndex)
     {
         
     }
