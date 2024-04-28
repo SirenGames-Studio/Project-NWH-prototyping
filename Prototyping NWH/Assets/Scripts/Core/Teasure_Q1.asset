@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 072d0b15aeea1954abaf3b6b2d9ddecf, type: 3}
+  m_Name: Teasure_Q1
+  m_EditorClassIdentifier: 
+  ItemID: treasure_hunt
+  ItemName: Gold Coin
+  ItemDescription: Map of gold coin in box
+  isCompleted: 0
+  objectives:
+  - Name: Found letter
+    complete: 0
+    QuestUpdate: Read letter to find clues
+    JournalEntry: I've found the letter in celler. Somebody put it there, i don't
+      know when they put it. I shoud read the letter and find out what it says.
+  - Name: Key Location
+    complete: 0
+    QuestUpdate: Find the key mentioned in the letter
+    JournalEntry: In letter it mentioned the key somewhere in bedroom. I should search
+      for it.
+  - Name: Found Key and Serch for Chest
+    complete: 0
+    QuestUpdate: 'Search for Chest described in letter '
+    JournalEntry: I've found the key and I should also search for the key mentioned
+      in letter.
+  - Name: Found Chest & Gold Coin Inside
+    complete: 0
+    QuestUpdate: Found the Coin....
+    JournalEntry: Ohh I've found the Chest i've been looking for and Inside there
+      is an old gold coin which looks valuable.
