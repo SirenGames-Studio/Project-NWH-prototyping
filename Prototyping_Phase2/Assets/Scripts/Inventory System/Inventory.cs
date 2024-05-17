@@ -5,7 +5,6 @@ using SGS.Inventory;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
-using SGS.Inventory;
 using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour

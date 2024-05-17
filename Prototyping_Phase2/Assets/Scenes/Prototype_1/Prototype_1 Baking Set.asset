@@ -133,25 +133,25 @@ MonoBehaviour:
   cellSharedDataAsset:
     m_AssetGUID: d563ccca87918a34cab7f33949737280
     m_StreamableAssetPath: APVStreamingAssets\3e0e830b94235634ba2d7f45bc42e8b5\d563ccca87918a34cab7f33949737280.bytes
-    m_ElementSize: 8192
+    m_ElementSize: 81920
     m_StreamableCellDescs:
       m_Keys: 0000000004000000020000000600000001000000050000000300000007000000
       m_Values:
       - offset: 0
         elementCount: 5
-      - offset: 40960
+      - offset: 409600
         elementCount: 4
-      - offset: 73728
+      - offset: 737280
         elementCount: 4
-      - offset: 106496
+      - offset: 1064960
         elementCount: 6
-      - offset: 155648
+      - offset: 1556480
         elementCount: 3
-      - offset: 180224
+      - offset: 1802240
         elementCount: 3
-      - offset: 204800
+      - offset: 2048000
         elementCount: 4
-      - offset: 237568
+      - offset: 2375680
         elementCount: 5
     m_Asset: {fileID: 0}
   scenarios:
@@ -263,17 +263,17 @@ MonoBehaviour:
     m_Extent: {x: 81, y: 81, z: 81}
   bakedSimplificationLevels: 3
   bakedMinDistanceBetweenProbes: 1
-  bakedSkyOcclusionValue: 0
-  bakedSkyShadingDirectionValue: 0
+  bakedSkyOcclusionValue: 1
+  bakedSkyShadingDirectionValue: 1
   bakedProbeOffset: {x: 0, y: 0, z: 0}
   maxSHChunkCount: 6
   L0ChunkSize: 65536
   L1ChunkSize: 32768
   L2TextureChunkSize: 32768
   sharedValidityMaskChunkSize: 8192
-  sharedSkyOcclusionL0L1ChunkSize: 0
-  sharedSkyShadingDirectionIndicesChunkSize: 0
-  sharedDataChunkSize: 8192
+  sharedSkyOcclusionL0L1ChunkSize: 65536
+  sharedSkyShadingDirectionIndicesChunkSize: 8192
+  sharedDataChunkSize: 81920
   supportPositionChunkSize: 98304
   supportValidityChunkSize: 32768
   supportTouchupChunkSize: 32768
@@ -289,12 +289,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   minRendererVolumeSize: 0.1
-  skyOcclusion: 0
+  skyOcclusion: 1
   skyOcclusionBakingSamples: 2048
   skyOcclusionBakingBounces: 2
   skyOcclusionAverageAlbedo: 0.6
   skyOcclusionBackFaceCulling: 0
-  skyOcclusionShadingDirection: 0
+  skyOcclusionShadingDirection: 1
   m_SceneBakeData:
     m_Keys:
     - 9bd61fec7ab6fa04e9e914cd4a2bb7a5

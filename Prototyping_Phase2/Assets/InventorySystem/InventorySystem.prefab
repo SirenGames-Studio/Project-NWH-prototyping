@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6997346336762557273}
   - component: {fileID: 1108259968960627132}
-  - component: {fileID: 6125534357916934857}
   m_Layer: 0
   m_Name: InventorySystem
   m_TagString: Untagged
@@ -45,19 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f58ace443a77de43a81abf338b38dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UISlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  UISlots: []
   Slots: []
   InventoryWindow: {fileID: 0}
   DropPosition: {fileID: 0}
@@ -89,20 +76,3 @@ MonoBehaviour:
   OnInventoryClose:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6125534357916934857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5959676576990793004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53a5c48480c758b4b9051f895a730ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InventoryMenu: {fileID: 0}
-  PauseMenu: {fileID: 0}
-  JournalSystem: {fileID: 0}
-  PlayerInput: {fileID: 0}
-  PlayerInputHandler: {fileID: 0}
