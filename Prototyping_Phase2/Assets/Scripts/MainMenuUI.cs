@@ -19,9 +19,6 @@ public class MainMenuUI : MonoBehaviour
     public GameObject mainMenu;
     public GameObject optionsMenu;
 
-    private float _fadeInTime = 0.5f;
-    private float _fadeOutTime = 1f;
-
     [SerializeField]
     private List<Button> _allButtons = new List<Button>();
     [SerializeField]
@@ -46,8 +43,8 @@ public class MainMenuUI : MonoBehaviour
 
     private void ConfigureAllOptions()
     {
-        _allButtons = UI_Manager.Instance.um_allButtons;
-        _allOptionTabs = UI_Manager.Instance.um_allOptionTabs;
+       // _allButtons = UIManager.Instance.um_allButtons;
+       // _allOptionTabs = UI_Manager.Instance.um_allOptionTabs;
     }
 
     private void ButtonCLickState()
@@ -57,7 +54,7 @@ public class MainMenuUI : MonoBehaviour
         _optionBtn.onClick.AddListener(OpenOptions);
         _creditBtn.onClick.AddListener(OpenCredit);
         _exitBtn.onClick.AddListener(ExitGame);
-
+       
     }
 
     private void ContinueGameState()
@@ -75,7 +72,7 @@ public class MainMenuUI : MonoBehaviour
     {
         AudioManager.Instance.PlayClickSound();
         mainMenu.SetActive(false);
-        UI_Manager.Instance.CreditTab.SetActive(true);
+       // UI_Manager.Instance.CreditTab.SetActive(true);
     }
 
 
@@ -134,7 +131,7 @@ public class MainMenuUI : MonoBehaviour
     {
         AudioManager.Instance.PlayClickSound();
         mainMenu.SetActive(false);
-        UI_Manager.Instance.OptionsMenu.SetActive(true);
+      //  UI_Manager.Instance.OptionsMenu.SetActive(true);
 
     }
 

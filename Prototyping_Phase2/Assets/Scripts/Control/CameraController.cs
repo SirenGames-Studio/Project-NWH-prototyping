@@ -37,13 +37,8 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-       if(UI_Manager.Instance._isSystemUIVisible)
-       {
-           return;
-       } else
-       {
-            RotateCamera();
-       }
+       
+         RotateCamera();
 
     }
     private void RotateCamera()

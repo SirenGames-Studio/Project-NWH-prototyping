@@ -67,13 +67,13 @@ public class UserInterface : MonoBehaviour
     {
          if (InventoryMenu.activeSelf || PauseMenu.activeSelf || JournalSystem.activeSelf)
     {
-         UI_Manager.Instance.CursorVisibility(true);
+        // UI_Manager.Instance.CursorVisibility(true);
          SystemUICanva.SetActive(true); // At least one panel is active, so keep the main canvas active
                                        //_isSystemUIVisible = true;
     }
     else
     {
-        UI_Manager.Instance.CursorVisibility(false);
+       // UI_Manager.Instance.CursorVisibility(false);
         SystemUICanva.SetActive(false); // All panels are inactive, so turn off the main canvas
       //  _isSystemUIVisible = false;
     }
