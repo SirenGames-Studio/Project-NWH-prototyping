@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public MainMenu MainMenu;
-    public PauseMenu PauseMenu;
+    public GameObject PausedGameState;
     public OptionsMenu OptionsMenu;
+
     public GameObject CreditTab;
     public GameObject PlayerCharacter;
 
@@ -26,7 +27,7 @@ public class UIManager : Singleton<UIManager>
        // _mainMenu.OnFadeComplete.AddListener(HandleMainMenuFadeComplete);
 
         GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
-        GameManager.Instance.OnGameTypeChanged.AddListener(HandleGameTypeSytem);
+        GameManager.Instance.OnGameTypeChanged.AddListener(HandleGameTypeSystem);
         
         BackBtn.onClick.AddListener(BackClickBehaviour);
     }
@@ -46,7 +47,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private void HandleGameTypeSytem(GameManager.GameType gameType)
+    private void HandleGameTypeSystem(GameManager.GameType gameType)
     {
         switch (gameType)
         {
@@ -72,11 +73,11 @@ public class UIManager : Singleton<UIManager>
         switch (currentState)
         {
             case GameManager.GameState.PAUSED:
-                PauseMenu.gameObject.SetActive(true);
+                PausedGameState.SetActive(true);
                 break;
 
             default:
-                PauseMenu.gameObject.SetActive(false);
+                PausedGameState.SetActive(false);
                 break;
         }
 

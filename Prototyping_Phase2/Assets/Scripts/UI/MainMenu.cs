@@ -62,6 +62,8 @@ public class MainMenu : MonoBehaviour
         GameManager.Instance.GameTypeState(gameType);
         NewGameType.SetActive(false);
         GameManager.Instance.ChangeValueToState(1);
+        GameManager.Instance.StartGame("Prototype_1");
+        
     }
 
     private void NewGame()

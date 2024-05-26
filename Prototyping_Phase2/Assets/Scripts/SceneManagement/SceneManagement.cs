@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System;
 
 public class SceneManagement : MonoBehaviour 
 {
@@ -13,10 +14,20 @@ public class SceneManagement : MonoBehaviour
     private void Start() 
     {
         _loadOperations = new List<AsyncOperation>();
-        GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
-       
+        //  GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+        GameManager.Instance.OnLoadLevelChanged.AddListener(HandleLoadingLevel);
     }
 
+    private void HandleLoadingLevel(bool callBack)
+    {
+        if(callBack == true)
+        {
+            _currentLevelName = GameManager.Instance._currentLevelName;
+
+            LoadLevel(_currentLevelName);
+            Debug.Log("Loading " +  _currentLevelName);
+        }
+    }
 
     void OnLoadOperationComplete(AsyncOperation ao)
     {
@@ -46,7 +57,7 @@ public class SceneManagement : MonoBehaviour
         }
     }
 
-    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState prevState)
+/*    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState prevState)
     {
         if(currentState == GameManager.GameState.RUNNING)
         {
@@ -56,7 +67,7 @@ public class SceneManagement : MonoBehaviour
             }
             Debug.Log("Loading Prototype 1");
         }
-    }
+    }*/
 
     public void LoadLevel(string levelName)
     {

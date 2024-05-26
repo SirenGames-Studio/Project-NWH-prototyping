@@ -21,11 +21,12 @@ public class GameManager : Singleton<GameManager>
     public GameObject[] SystemPrefabs;
     public EventGameState OnGameStateChanged;
     public EventGameType OnGameTypeChanged;
+    public EventLoadLevel OnLoadLevelChanged;
 
     List<GameObject> _instancedSystemPrefabs;
     GameState _currentGameState = GameState.PREGAME; 
 
-    string _currentLevelName;
+    public string _currentLevelName;
 
     private GameType _currentGameType = GameType.SURVIVAL;
 
@@ -59,6 +60,9 @@ public class GameManager : Singleton<GameManager>
         if(_currentGameState == GameState.RUNNING) 
         {
             Cursor.lockState = CursorLockMode.Locked;
+        } else if (_currentGameState == GameState.PAUSED)
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -85,19 +89,16 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.PREGAME:
                 // Initialize any systems that need to be reset
-                Debug.Log("pregame");
                 Time.timeScale = 1.0f;
                 break;
 
             case GameState.RUNNING:
                 //  Unlock player, enemies and input in other systems, update tick if you are managing time
-                Debug.Log("running");
                 Time.timeScale = 1.0f;
                 break;
 
             case GameState.PAUSED:
                 // Pause player, enemies etc, Lock other input in other systems
-                Debug.Log("paused");
                 Time.timeScale = 0.0f;
                 break;
 
@@ -116,6 +117,12 @@ public class GameManager : Singleton<GameManager>
             prefabInstance = Instantiate(SystemPrefabs[i]);
             _instancedSystemPrefabs.Add(prefabInstance);
         }
+    }
+
+    public void StartGame(string levelName)
+    {
+        _currentLevelName = levelName;
+        OnLoadLevelChanged.Invoke(true);
     }
 
     public void ChangeValueToState(int value)
@@ -141,4 +148,6 @@ public class GameManager : Singleton<GameManager>
 
 [System.Serializable] public class EventGameState : UnityEvent<GameState, GameState> { }
 [System.Serializable] public class EventGameType : UnityEvent<GameType> { }
+
+[System.Serializable] public class EventLoadLevel : UnityEvent<bool> { }
 

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PauseMenu : MonoBehaviour 
+public class PausedStateMenu : MonoBehaviour 
 {
 
     public GameObject PausedTab;
@@ -11,11 +11,13 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        
+       
     }
 
     private void Update()
     {
+        if(GameManager.Instance.CurrentGameState == GameManager.GameState.PREGAME) { return; }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             HandlePausedState();
@@ -40,24 +42,38 @@ public class PauseMenu : MonoBehaviour
     private void HandleJournalState()
     {
         JournalTab.SetActive(!JournalTab.activeSelf);
+        if (JournalTab.activeSelf)
+        {
+            InventoryTab.SetActive(false);
+            PausedTab.SetActive(false);
+        }
     }
 
     private void HandleInventoryState()
     {
         InventoryTab.SetActive(!InventoryTab.activeSelf);
+        if (InventoryTab.activeSelf)
+        {
+            JournalTab.SetActive(false);
+            PausedTab.SetActive(false);
+        }
     }
 
     private void HandlePausedState()
     {
         PausedTab.SetActive(!PausedTab.activeSelf);
+        if (PausedTab.activeSelf)
+        {
+            InventoryTab.SetActive(false);
+            JournalTab.SetActive(false);
+        }
     }
 
     private void UpdatePausedStateCanvas()
     {
         bool isAnyActiveTab = JournalTab.activeSelf || InventoryTab.activeSelf || PausedTab.activeSelf;
         // UIManager.Instance.PauseMenu.gameObject.SetActive(isAnyActiveTab);
-        Debug.Log(isAnyActiveTab);
-        UIManager.Instance.PauseMenu.gameObject.SetActive(true);
-       // UIManager.Instance.PausedState(isAnyActiveTab);
+       //  UIManager.Instance.PausedGameState.SetActive(isAnyActiveTab);
+       UIManager.Instance.PausedState(isAnyActiveTab);
     }
 }

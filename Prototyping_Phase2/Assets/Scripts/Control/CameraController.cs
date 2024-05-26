@@ -37,7 +37,8 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-       
+       if(GameManager.Instance.CurrentGameState == GameManager.GameState.PAUSED) { return; }
+
          RotateCamera();
 
     }
