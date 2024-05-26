@@ -7,13 +7,13 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
    
-    [SerializeField] private CinemachineCamera virtualCamera;
+    [SerializeField] private GameObject _cineMachineCam;
     private float _cinemachineTargetPitch;
     [SerializeField] private float mouseSensitivity = 2.0f; 
 
     [SerializeField] private float verticalSpeed = 2.0f;
     [SerializeField] private float horizontalSpeed = 2.0f;
-    [SerializeField] private float clampAngle = 90.0f;
+    [SerializeField] private float clampAngle = 70.0f;
 
 
 
@@ -56,7 +56,7 @@ public class CameraController : MonoBehaviour
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, -clampAngle, clampAngle);
 
             // Update Cinemachine camera target pitch
-            virtualCamera.transform.localRotation = Quaternion.Euler(-_cinemachineTargetPitch, 0.0f, 0.0f);
+            _cineMachineCam.transform.localRotation = Quaternion.Euler(-_cinemachineTargetPitch, 0.0f, 0.0f);
 
             // rotate the player left and right
             transform.Rotate(Vector3.up * _rotationVelocity);

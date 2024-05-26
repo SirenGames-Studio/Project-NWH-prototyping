@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEditor;
 
 public class SceneManagement : MonoBehaviour 
 {
@@ -13,7 +13,10 @@ public class SceneManagement : MonoBehaviour
     private void Start() 
     {
         _loadOperations = new List<AsyncOperation>();
+        GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+       
     }
+
 
     void OnLoadOperationComplete(AsyncOperation ao)
     {
@@ -23,8 +26,7 @@ public class SceneManagement : MonoBehaviour
 
             if (_loadOperations.Count == 0)
             {
-                // GameManager.Instance.UpdateState(GameState.RUNNING);
-                GameManager.Instance.ChangeValueToState(1);
+                GameManager.Instance.UpdateState(GameManager.GameState.RUNNING);
             }
         }
     }
@@ -41,6 +43,18 @@ public class SceneManagement : MonoBehaviour
         if (!fadeIn)
         {
             UnloadLevel(_currentLevelName);
+        }
+    }
+
+    private void HandleGameStateChanged(GameManager.GameState currentState, GameManager.GameState prevState)
+    {
+        if(currentState == GameManager.GameState.RUNNING)
+        {
+            if(_currentLevelName == null)
+            {
+                 LoadLevel("Prototype_1");
+            }
+            Debug.Log("Loading Prototype 1");
         }
     }
 

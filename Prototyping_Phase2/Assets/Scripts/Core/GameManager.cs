@@ -20,11 +20,20 @@ public class GameManager : Singleton<GameManager>
 
     public GameObject[] SystemPrefabs;
     public EventGameState OnGameStateChanged;
+    public EventGameType OnGameTypeChanged;
 
     List<GameObject> _instancedSystemPrefabs;
     GameState _currentGameState = GameState.PREGAME; 
 
     string _currentLevelName;
+
+    private GameType _currentGameType = GameType.SURVIVAL;
+
+    public GameType CurrentGameType
+    {
+        get { return _currentGameType; }
+        private set { _currentGameType = value; }
+    }
 
     public GameState CurrentGameState
     {
@@ -33,7 +42,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    void Start()
+    private void Start()
     {
         DontDestroyOnLoad(gameObject);
         
@@ -41,23 +50,33 @@ public class GameManager : Singleton<GameManager>
 
         //UIManager.Instance.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
 
-        OnGameStateChanged.Invoke(GameState.PREGAME, _currentGameState);
+       // OnGameStateChanged.Invoke(GameState.PREGAME, _currentGameState);
     }
 
-    void Update()
+    private void Update()
     {
-        if (_currentGameState == GameState.PREGAME)
-        {
-            return;
-        }
 
-        if (Input.GetKeyUp(KeyCode.Escape))
+        if(_currentGameState == GameState.RUNNING) 
         {
-           // TogglePause();
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
-     void UpdateState(GameState state)
+    public void GameTypeState(int value)
+    {
+        if(value == 0)
+        {
+            Debug.Log("survival");
+            CurrentGameType = GameType.SURVIVAL;
+        } else if(value == 1)
+        {
+            Debug.Log("adventure");
+            CurrentGameType = GameType.ADVENTURE;
+        }
+    }
+
+
+     public void UpdateState(GameState state)
     {
         GameState previousGameState = _currentGameState;
         _currentGameState = state;
@@ -66,16 +85,19 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.PREGAME:
                 // Initialize any systems that need to be reset
+                Debug.Log("pregame");
                 Time.timeScale = 1.0f;
                 break;
 
             case GameState.RUNNING:
                 //  Unlock player, enemies and input in other systems, update tick if you are managing time
+                Debug.Log("running");
                 Time.timeScale = 1.0f;
                 break;
 
             case GameState.PAUSED:
                 // Pause player, enemies etc, Lock other input in other systems
+                Debug.Log("paused");
                 Time.timeScale = 0.0f;
                 break;
 
@@ -86,7 +108,7 @@ public class GameManager : Singleton<GameManager>
         OnGameStateChanged.Invoke(_currentGameState, previousGameState);
     }
 
-    void InstantiateSystemPrefabs()
+    private void InstantiateSystemPrefabs()
     {
         GameObject prefabInstance;
         for (int i = 0; i < SystemPrefabs.Length; ++i)
@@ -118,3 +140,5 @@ public class GameManager : Singleton<GameManager>
 }
 
 [System.Serializable] public class EventGameState : UnityEvent<GameState, GameState> { }
+[System.Serializable] public class EventGameType : UnityEvent<GameType> { }
+

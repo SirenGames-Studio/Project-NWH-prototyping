@@ -1,4 +1,7 @@
+using System;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -6,12 +9,11 @@ public class UIManager : Singleton<UIManager>
     public PauseMenu PauseMenu;
     public OptionsMenu OptionsMenu;
     public GameObject CreditTab;
+    public GameObject PlayerCharacter;
 
-   // [HideInInspector] public OptionsMenu OptionsMenu;
+    public GameObject QuestList;
 
-
-
-    [HideInInspector] public GameObject NewGameType;
+    public Button BackBtn;
 
     [SerializeField] private Camera _dummyCamera;
 
@@ -24,16 +26,38 @@ public class UIManager : Singleton<UIManager>
        // _mainMenu.OnFadeComplete.AddListener(HandleMainMenuFadeComplete);
 
         GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
+        GameManager.Instance.OnGameTypeChanged.AddListener(HandleGameTypeSytem);
+        
+        BackBtn.onClick.AddListener(BackClickBehaviour);
+    }
+
+    private void BackClickBehaviour()
+    {
+        OptionsMenu.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (GameManager.Instance.CurrentGameState == GameManager.GameState.PREGAME)
+         if(GameManager.Instance.CurrentGameState == GameManager.GameState.PREGAME) { return; }
+
+        if (GameManager.Instance.CurrentGameState == GameManager.GameState.PAUSED)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("Space pressed");
-            }
+           // PauseMenu.gameObject.SetActive(true);
+        }
+    }
+
+    private void HandleGameTypeSytem(GameManager.GameType gameType)
+    {
+        switch (gameType)
+        {
+            case GameManager.GameType.SURVIVAL:
+                QuestList.SetActive(false);
+                
+                break;
+            case GameManager.GameType.ADVENTURE:
+                QuestList.SetActive(true);
+                
+                break;
         }
     }
 
@@ -55,10 +79,32 @@ public class UIManager : Singleton<UIManager>
                 PauseMenu.gameObject.SetActive(false);
                 break;
         }
+
+        if(currentState == GameManager.GameState.RUNNING)
+        {
+            MainMenu.gameObject.SetActive(false);
+            PlayerCharacter.SetActive(true);
+            SetDummyCameraActive(false);
+        } 
     }
 
     public void SetDummyCameraActive(bool active)
     {
         _dummyCamera.gameObject.SetActive(active);
+    }
+
+    public void PausedState(bool state)
+    {
+        if (state == true)
+        {
+            GameManager.Instance.UpdateState(GameManager.GameState.PAUSED);
+            Debug.Log("game is pause usin state");
+        }
+        else if (state == false)
+        {
+            GameManager.Instance.UpdateState(GameManager.GameState.RUNNING);
+            Debug.Log("game is unpaused usin state");
+
+        }
     }
 }

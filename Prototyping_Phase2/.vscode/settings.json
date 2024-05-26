@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Prototyping_Phase2.sln"
+    "dotnet.defaultSolution": "Prototyping_Phase2.sln",
+    "dotnet.preferCSharpExtension": true
 }

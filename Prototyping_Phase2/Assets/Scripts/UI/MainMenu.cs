@@ -12,63 +12,72 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button _optionBtn;
     [SerializeField] private Button _creditBtn;
     [SerializeField] private Button _exitBtn;
-
+/// <summary>
+/// ///////////////////////
+/// </summary>
     [SerializeField] private Button _backBtn;
 
+    public GameObject NewGameType;
 
+    [SerializeField] private Button _typeABtn;
+    [SerializeField] private Button _typeBBtn;
+
+    [SerializeField] private bool _haveSavedGame = false;
     private void Start()
     {
 
+        if(!_haveSavedGame)
+        {
+            _continueBtn.interactable = false;
+        } else
+        {
+            _continueBtn.interactable = true;
+        }
+
+        ButtonCLickState();
+
+    }
+
+    private void ButtonCLickState()
+    {
         _continueBtn.onClick.AddListener(ContinueGameState);
         _newGameBtn.onClick.AddListener(NewGame);
         _optionBtn.onClick.AddListener(OpenOptions);
         _creditBtn.onClick.AddListener(OpenCredit);
         _exitBtn.onClick.AddListener(ExitGame);
 
-        // //Button button = _newGameBtn.GetComponent<Button>();
-        // ConfigureAllOptions();
-        // for (int i = 0; i < _allButtons.Count; i++)
-        // {
-        //     int index = i;
-        //     _allButtons[index].onClick.AddListener(() => ShowOptionPanels(index));
-
-        // }
-
-        // ButtonCLickState();
+        //GameTyeState
+        _typeABtn.onClick.AddListener(() => OnGameTypeButtonClicked(0));
+        _typeBBtn.onClick.AddListener(() => OnGameTypeButtonClicked(1));
 
     }
-
-    private void ConfigureAllOptions()
-    {
-        //_allButtons = UIManager.Instance.um_allButtons;
-        // _allOptionTabs = UIManager.Instance.um_allOptionTabs;
-    }
-
-    // private void ButtonCLickState()
-    // {
-    //     _continueBtn.onClick.AddListener(ContinueGameState);
-    //     _newGameBtn.onClick.AddListener(NewGame);
-    //     _optionBtn.onClick.AddListener(OpenOptions);
-    //     _creditBtn.onClick.AddListener(OpenCredit);
-    //     _exitBtn.onClick.AddListener(ExitGame);
-
-    // }
 
     private void ContinueGameState()
     {
         //TODO: Continue Game
     }
+
+    private void OnGameTypeButtonClicked(int gameType)
+    {
+        GameManager.Instance.GameTypeState(gameType);
+        NewGameType.SetActive(false);
+        GameManager.Instance.ChangeValueToState(1);
+    }
+
     private void NewGame()
     {
-        AudioManager.Instance.PlayClickSound();
-        UIManager.Instance.NewGameType.SetActive(true);
+        //AudioManager.Instance.PlayClickSound();
+        //UIManager.Instance.NewGameType.SetActive(true);
+        NewGameType.SetActive(true);
+
 
     }
 
     private void OpenCredit()
     {
-        AudioManager.Instance.PlayClickSound();
+//        AudioManager.Instance.PlayClickSound();
        // mainMenu.SetActive(false);
+      // Debug.Log("Open Credit");
        UIManager.Instance.CreditTab.SetActive(true);
        if (UIManager.Instance.CreditTab != null)
        {
@@ -86,75 +95,15 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.E))
-    //     {
-    //         int nextTabIndex = GetCurrentTabIndex() + 1;
-    //         if(nextTabIndex >= 5)
-    //         {
-    //             nextTabIndex = 0;
-    //             ShowOptionPanels(nextTabIndex);
-    //         }
-    //         ShowOptionPanels(nextTabIndex);
-
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.Q))
-    //     {
-    //         int nextTabIndex = GetCurrentTabIndex() - 1;
-    //         if (nextTabIndex < 0)
-    //         {
-    //             nextTabIndex = 4;
-    //             ShowOptionPanels(nextTabIndex);
-    //         }
-    //         ShowOptionPanels(nextTabIndex);
-
-    //     }
-
-
-    // private void ShowOptionPanels(int index)
-    // {
-    //     switch (index)
-    //     {
-    //         case 0:
-    //         case 1:
-    //         case 2:
-    //         case 3:
-    //         case 4:
-
-    //             for (int i = 0; i < _allOptionTabs.Count; i++)
-    //             {
-    //                 _allOptionTabs[i].SetActive(i == index);
-
-    //                 AudioManager.Instance.PlayClickSound();
-    //             }
-    //             break;
-    //     }
-    // }
+    
     private void OpenOptions()
     {
         // AudioManager.Instance.PlayClickSound();
-        UIManager.Instance.MainMenu.gameObject.SetActive(false);
-        // UIManager.Instance.OptionsMenu.SetActive(true);
+      //  UIManager.Instance.MainMenu.gameObject.SetActive(false);
+        UIManager.Instance.OptionsMenu.gameObject.SetActive(true);
 
     }
 
-    // public int GetCurrentTabIndex()
-    // {
-    //     // Find the index of the active panel
-    //     for (int i = 0; i < _allOptionTabs.Count; i++)
-    //     {
-    //         if (_allOptionTabs[i].activeSelf)
-    //         {
-    //             return i;
-    //         }
-    //     }
-    //     return -1; // No active panel found
-    // }
-
-
-
-
-
+    
 
 }

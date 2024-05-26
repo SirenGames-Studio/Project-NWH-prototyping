@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
+  - enabled: 1
+    path: Assets/Scenes/GamePlayInstance.unity
+    guid: 37b4dcfd5cb975644b37e43b3a05e863
+  - enabled: 1
+    path: Assets/Scenes/Prototype_1.unity
+    guid: 9bd61fec7ab6fa04e9e914cd4a2bb7a5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 77dd7f012a9afe34f8e4466b1c84de14, type: 3}
   m_UseUCBPForAssetBundles: 0
