@@ -1,235 +1,232 @@
 
 using System;
 using SGS.Controls;
-using SGS.Inventory;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class Inventory : MonoBehaviour
+namespace SGS.Inventory
 {
-    public ItemSlotUI[] UISlots;
-    public ItemSlot[] Slots;
 
-    public GameObject InventoryWindow;
-    public Transform DropPosition;
-
-    [Header("Selected Item")] private ItemSlot SelectedItem;
-     private int _selectedItemIndex;
-    [SerializeField] private TextMeshProUGUI selectedItemName;
-    [SerializeField] private TextMeshProUGUI selectedItemDescription;
-    [SerializeField] private TextMeshProUGUI selectedItemStatName;
-    [SerializeField] private TextMeshProUGUI selectedItemStatValues;
-    public GameObject UseButton;
-    public GameObject EquipButton;
-    public GameObject UnEquipButton;
-    public GameObject DropButton;
-
-    private int _curEquipIndex;
-
-    public FirstPersonController playerController;
-    public MouseLook mouseController;
-
-    [Header("Events")] 
-    public UnityEvent OnInventoryOpen;
-
-    public UnityEvent OnInventoryClose;
-    
-    //singleton
-    public static Inventory Instance;
-
-    private void Awake()
+    public class Inventory : Singleton<Inventory>
     {
-        Instance = this;
-    }
-
-    private void Start()
-    {
-        InventoryWindow.SetActive(false);
-        Slots = new ItemSlot[UISlots.Length];
+        public ItemSlotUI[] UISlots;
+        public ItemSlot[] Slots;
         
-        //initialize the slots
-        for (int x = 0; x < Slots.Length; x++)
+
+        public GameObject InventoryWindow;
+        public Transform DropPosition;
+
+        [Header("Selected Item")] private ItemSlot SelectedItem;
+        private int _selectedItemIndex;
+        [SerializeField] private TextMeshProUGUI selectedItemName;
+        [SerializeField] private TextMeshProUGUI selectedItemDescription;
+        [SerializeField] private TextMeshProUGUI selectedItemStatName;
+        [SerializeField] private TextMeshProUGUI selectedItemStatValues;
+        public GameObject UseButton;
+        public GameObject EquipButton;
+        public GameObject UnEquipButton;
+        public GameObject DropButton;
+
+        private int _curEquipIndex;
+
+        public FirstPersonController playerController;
+        public CameraController CameraController;
+
+        [Header("Events")]
+        public UnityEvent OnInventoryOpen;
+
+        public UnityEvent OnInventoryClose;
+
+
+        private void Start()
         {
-            Slots[x] = new ItemSlot();
-            UISlots[x].Index = x;
-            UISlots[x].Clear();
-        }
-        
-        ClearSelectedItemWindow();
-    }
+            InventoryWindow.SetActive(false);
+            Slots = new ItemSlot[UISlots.Length];
 
-
-    public bool IsOpen()
-    {
-        return InventoryWindow.activeInHierarchy;
-    }
-
-    //adds the requested item to the player's inventory
-    public void AddItem(ItemData_SO itemSO)
-    {
-        //is item stackable ?
-        if (itemSO.CanStack)
-        {
-            ItemSlot slotToStackTo = GetItemStack(itemSO);
-            if (slotToStackTo != null)
+            //initialize the slots
+            for (int x = 0; x < Slots.Length; x++)
             {
-                slotToStackTo.Quantity++;
-                UpdateUI();
-                return;
-            }
-        }
-        
-        // is there available empty slot
-        ItemSlot emptySlot = GetEmptySlot();
-        if (emptySlot != null)
-        {
-            emptySlot.ItemData = itemSO;
-            emptySlot.Quantity = 1;
-            UpdateUI();
-            Debug.Log("Adding Item to Empty Slot");
-            return;
-        }
-        ThrowItem(itemSO);
-    }
-
-    private void ThrowItem(ItemData_SO itemSO)
-    {
-        Instantiate(itemSO.DropPrefab, DropPosition.position, Quaternion.Euler(Vector3.one));
-    }
-
-    void UpdateUI()
-    {
-        for (int x = 0; x < Slots.Length; x++)
-        {
-            if (Slots[x].ItemData != null)
-            {
-                UISlots[x].Set(Slots[x]);
-            }
-            else
-            {
+                Slots[x] = new ItemSlot();
+                UISlots[x].Index = x;
                 UISlots[x].Clear();
             }
-        }
-    }
 
-    private ItemSlot GetItemStack(ItemData_SO itemSO)
-    {
-        for (int x = 0; x < Slots.Length; x++)
-        {
-            if (Slots[x].ItemData == itemSO && Slots[x].Quantity < itemSO.MaxStackAmount)
-                return Slots[x];
-        }
-    
-        return null;
-    }
-
-    private ItemSlot GetEmptySlot()
-    {
-        for (int x = 0; x < Slots.Length; x++)
-        {
-            if (Slots[x].ItemData == null)
-                return Slots[x];
-        }
-        
-        return null;
-    }
-
-    public void SelectItem(int index)
-    {
-        if(Slots[index].ItemData == null)
-            return;
-
-        SelectedItem = Slots[index];
-        _selectedItemIndex = index;
-
-        selectedItemName.text = SelectedItem.ItemData.DisplayName;
-        selectedItemDescription.text = SelectedItem.ItemData.Description;
-        
-        
-        //set stat value and stat name
-
-        UseButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Consumable);
-        EquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Equipable && !UISlots[index].Equipped);
-        UnEquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == SGS.Inventory.ItemBehaviour.Equipable && UISlots[index].Equipped);
-        DropButton.SetActive(true);
-
-        
-    }
-
-    private void ClearSelectedItemWindow()
-    {
-        //clear text elements
-        SelectedItem = null;
-        selectedItemName.text = string.Empty;
-        selectedItemDescription.text = string.Empty;
-        selectedItemStatName.text = string.Empty;
-        selectedItemStatValues.text = string.Empty;
-        
-        //disable item
-        UseButton.SetActive(false);
-        EquipButton.SetActive(false);
-        UnEquipButton.SetActive(false);
-        DropButton.SetActive(false);
-    }
-
-    public void OnUseButton()
-    {
-        
-    }
-
-    public void OnEquipButton()
-    {
-        
-    } 
-    
-    public void OnUnEquipButton()
-    {
-        
-    }
-
-    public void OnDropButton()
-    {
-        ThrowItem(SelectedItem.ItemData);
-        RemoveSelectedItem();
-    }
-
-    public void RemoveSelectedItem()
-    {
-        SelectedItem.Quantity--;
-        if(SelectedItem.Quantity == 0)
-        {
-            if (UISlots[_selectedItemIndex].Equipped == true)
-                    UnEquip(_selectedItemIndex);
-
-            SelectedItem.ItemData = null;
             ClearSelectedItemWindow();
         }
 
-        UpdateUI(); 
+
+        public bool IsOpen()
+        {
+            return InventoryWindow.activeInHierarchy;
+        }
+
+        //adds the requested item to the player's inventory
+        public void AddItem(ItemData_SO itemSO)
+        {
+            //is item stackable ?
+            if (itemSO.CanStack)
+            {
+                ItemSlot slotToStackTo = GetItemStack(itemSO);
+                if (slotToStackTo != null)
+                {
+                    slotToStackTo.Quantity++;
+                    UpdateUI();
+                    return;
+                }
+            }
+
+            // is there available empty slot
+            ItemSlot emptySlot = GetEmptySlot();
+            if (emptySlot != null)
+            {
+                emptySlot.ItemData = itemSO;
+                emptySlot.Quantity = 1;
+                UpdateUI();
+                return;
+            }
+            ThrowItem(itemSO);
+        }
+
+        private void ThrowItem(ItemData_SO itemSO)
+        {
+            Instantiate(itemSO.DropPrefab, DropPosition.position, Quaternion.Euler(Vector3.one));
+        }
+
+        void UpdateUI()
+        {
+            for (int x = 0; x < Slots.Length; x++)
+            {
+                if (Slots[x].ItemData != null)
+                {
+                    UISlots[x].Set(Slots[x]);
+                }
+                else
+                {
+                    UISlots[x].Clear();
+                }
+            }
+        }
+
+        private ItemSlot GetItemStack(ItemData_SO itemSO)
+        {
+            for (int x = 0; x < Slots.Length; x++)
+            {
+                if (Slots[x].ItemData == itemSO && Slots[x].Quantity < itemSO.MaxStackAmount)
+                    return Slots[x];
+            }
+
+            return null;
+        }
+
+        private ItemSlot GetEmptySlot()
+        {
+            for (int x = 0; x < Slots.Length; x++)
+            {
+                if (Slots[x].ItemData == null)
+                    return Slots[x];
+            }
+
+            return null;
+        }
+
+        public void SelectItem(int index)
+        {
+            if (Slots[index].ItemData == null)
+                return;
+
+            SelectedItem = Slots[index];
+            _selectedItemIndex = index;
+
+            selectedItemName.text = SelectedItem.ItemData.DisplayName;
+            selectedItemDescription.text = SelectedItem.ItemData.Description;
+
+
+            //set stat value and stat name
+
+            UseButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Consumable);
+            EquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && !UISlots[index].Equipped);
+            UnEquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && UISlots[index].Equipped);
+            DropButton.SetActive(true);
+
+
+        }
+
+        private void ClearSelectedItemWindow()
+        {
+            //clear text elements
+            SelectedItem = null;
+            selectedItemName.text = string.Empty;
+            selectedItemDescription.text = string.Empty;
+            selectedItemStatName.text = string.Empty;
+            selectedItemStatValues.text = string.Empty;
+
+            //disable item
+            UseButton.SetActive(false);
+            EquipButton.SetActive(false);
+            UnEquipButton.SetActive(false);
+            DropButton.SetActive(false);
+        }
+
+        public void OnUseButton()
+        {
+
+        }
+
+        public void OnEquipButton()
+        {
+
+        }
+
+        public void OnUnEquipButton()
+        {
+
+        }
+
+        public void OnDropButton()
+        {
+            ThrowItem(SelectedItem.ItemData);
+            RemoveSelectedItem();
+        }
+
+        public void RemoveSelectedItem()
+        {
+            SelectedItem.Quantity--;
+            if (SelectedItem.Quantity == 0)
+            {
+                if (UISlots[_selectedItemIndex].Equipped == true)
+                    UnEquip(_selectedItemIndex);
+
+                SelectedItem.ItemData = null;
+                ClearSelectedItemWindow();
+            }
+
+            UpdateUI();
+        }
+
+        private void UnEquip(int selectedItemIndex)
+        {
+
+        }
+
+        public void RemoveItem(ItemData_SO itemSO)
+        {
+
+        }
+
+        public bool HasItems(ItemData_SO itemSO)
+        {
+            return false;
+        }
+
     }
 
-    private void UnEquip(int selectedItemIndex)
+    [System.Serializable]
+    public class ItemSlot
     {
-        
+        public ItemData_SO ItemData;
+        public int Quantity;
     }
 
-    public void RemoveItem(ItemData_SO itemSO)
-    {
-        
-    }
-
-    public bool HasItems(ItemData_SO itemSO)
-    {
-        return false;
-    }
-    
-}
-
-[System.Serializable]
-public class ItemSlot
-{
-    public ItemData_SO ItemData;
-    public int Quantity;
 }

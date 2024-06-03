@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SGS.Inventory;
 
 public class ItemSlotUI : MonoBehaviour
 {

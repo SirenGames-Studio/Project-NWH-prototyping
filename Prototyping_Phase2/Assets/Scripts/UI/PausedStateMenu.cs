@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class PausedStateMenu : MonoBehaviour 
 {
@@ -9,10 +9,74 @@ public class PausedStateMenu : MonoBehaviour
     public GameObject InventoryTab;
     public GameObject JournalTab;
 
+    #region PauseMenuBehaviour
+    // paused Buttons
+    [SerializeField] private Button _resume;
+    //[SerializeField] private Button _reloadCheckpoint;
+    [SerializeField] private Button _options;
+    [SerializeField] private Button _credits;
+    [SerializeField] private Button _quitToMainmenu;
+    [SerializeField] private Button _quittoDesktop;
+    [SerializeField] private Button _backButton;
+
+    [SerializeField] private GameObject _optionsTab;
+    [SerializeField] private GameObject _creditsTab;
+    [SerializeField] private GameObject _MainPausedMenu;
+
+    [SerializeField] private GameObject _mainMenuTab;
+
+
     private void Start()
     {
+        _resume.onClick.AddListener(ResumeButtonClicked);
+        _options.onClick.AddListener(OptionsButtonClicked);
+        _credits.onClick.AddListener(CreditsTabClicked);
+        _quitToMainmenu.onClick.AddListener(QuitToMainMenu);
+        _quittoDesktop.onClick.AddListener(QuitToDesktop);
+
+        //back behaviour
+        _backButton.onClick.AddListener(OnBackButtonClicked);
+
+    }
+
+    private void ResumeButtonClicked()
+    {
+        _MainPausedMenu.SetActive(false);
+        UIManager.Instance.OnResumeStateChange.Invoke(true);
        
     }
+    private void OptionsButtonClicked()
+    {
+       _optionsTab.SetActive(true);
+    }
+
+    private void CreditsTabClicked()
+    {
+        _creditsTab.SetActive(true);
+    }
+    private void QuitToMainMenu()
+    {
+        _mainMenuTab.SetActive(true);
+        UIManager.Instance.OnClickToMainMenu.Invoke(true);
+    }
+
+    private void QuitToDesktop()
+    {
+        Application.Quit();
+    }
+
+
+    private void OnBackButtonClicked()
+    {
+       _creditsTab.SetActive(false);
+    }
+
+
+
+    // paused Behavior
+
+    #endregion
+
 
     private void Update()
     {
@@ -76,4 +140,6 @@ public class PausedStateMenu : MonoBehaviour
        //  UIManager.Instance.PausedGameState.SetActive(isAnyActiveTab);
        UIManager.Instance.PausedState(isAnyActiveTab);
     }
+
+
 }

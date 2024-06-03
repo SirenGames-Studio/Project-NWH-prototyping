@@ -9,6 +9,8 @@ public class SceneManagement : MonoBehaviour
     private List<AsyncOperation> _loadOperations;
     private string _currentLevelName;
 
+   // private Events.EventUnloadScene UnloadCurrentScene;
+
     protected int callbackvalue = 0;
 
     private void Start() 
@@ -16,6 +18,17 @@ public class SceneManagement : MonoBehaviour
         _loadOperations = new List<AsyncOperation>();
         //  GameManager.Instance.OnGameStateChanged.AddListener(HandleGameStateChanged);
         GameManager.Instance.OnLoadLevelChanged.AddListener(HandleLoadingLevel);
+        GameManager.Instance.UnloadCurrentScene.AddListener(OnUnloadCurrentScene);
+    }
+
+    private void OnUnloadCurrentScene()
+    {
+        UnloadLevel(_currentLevelName);
+    }
+
+    private void Update()
+    {
+        
     }
 
     private void HandleLoadingLevel(bool callBack)
@@ -25,7 +38,6 @@ public class SceneManagement : MonoBehaviour
             _currentLevelName = GameManager.Instance._currentLevelName;
 
             LoadLevel(_currentLevelName);
-            Debug.Log("Loading " +  _currentLevelName);
         }
     }
 

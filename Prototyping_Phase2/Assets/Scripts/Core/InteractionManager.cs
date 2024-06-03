@@ -5,15 +5,17 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using SGS.InputSystem;
 using UnityEngine.InputSystem;
+using SGS.Gameplay;
+using SGS.Inventory;
 
 public class InteractionManager : MonoBehaviour
 {
     [FormerlySerializedAs("RayCastCheckRate")]
     [Header("RayCast Settings")]
-   [SerializeField] private float checkRate = 0.5f;
-   [SerializeField] private float lastCheckTime;
-   [SerializeField] private float maxCheckDistance = 5f;
-   [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float checkRate = 0.5f;
+    [SerializeField] private float lastCheckTime;
+    [SerializeField] private float maxCheckDistance = 5f;
+    [SerializeField] private LayerMask layerMask;
 
 
     private GameObject _curInteractGameObject;
@@ -21,7 +23,7 @@ public class InteractionManager : MonoBehaviour
 
     public TextMeshProUGUI promptText;
     private Camera _mainCam;
-    
+
     [Header("Handling Inputs")]
     public PlayerInput PlayerInput;
     public InputsHandler PlayerInputHandler;
@@ -47,7 +49,12 @@ public class InteractionManager : MonoBehaviour
                 {
                     _curInteractGameObject = hit.collider.gameObject;
                     _curInteractable = hit.collider.GetComponent<IInteractable>();
-                    SetPromptText();
+
+                    if (_curInteractable != null)
+                    {
+
+                        SetPromptText();
+                    }
                 }
             }
             else
@@ -56,13 +63,13 @@ public class InteractionManager : MonoBehaviour
                 _curInteractGameObject = null;
                 promptText.gameObject.SetActive(false);
             }
-            
+
         }
     }
 
     private void OnInteractInput()
     {
-         _frameInput = PlayerInputHandler.FrameInput;
+        _frameInput = PlayerInputHandler.FrameInput;
         if (_frameInput.PickUP && _curInteractable != null)
         {
             _curInteractable.OnInteract();
@@ -75,6 +82,30 @@ public class InteractionManager : MonoBehaviour
     private void SetPromptText()
     {
         promptText.gameObject.SetActive(true);
-        promptText.text = string.Format("<b>[E]<b> {0}", _curInteractable.GetInteractPrompt());
+
+        string prompt = _curInteractable.GetInteractPrompt();
+        ItemPickup itemPickup = _curInteractable as ItemPickup;
+        if (itemPickup != null)
+        {
+            switch (itemPickup.ItemVariety)
+            {
+                case ItemVariety.None:
+                case ItemVariety.Pickable:
+                    promptText.text = string.Format("<b>[E]<b> {0}", prompt);
+                    break;
+                case ItemVariety.Openable:
+                    promptText.text = string.Format("<b>[F]<b> {0}", prompt);
+                    break;
+
+            }
+        }
+        else
+        {
+            promptText.text = string.Format("<b>[E]</b> {0}", prompt);
+        }
     }
+
+
 }
+
+   

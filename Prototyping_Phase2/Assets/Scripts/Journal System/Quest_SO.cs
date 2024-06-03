@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="New Quest",menuName ="SGS/Quest",order = 1)]
 public class Quest_SO : ScriptableObject
 {
-    public string ItemID;
+    public string ID;
+
     public string ItemName;
 
     [TextArea(3,5)]

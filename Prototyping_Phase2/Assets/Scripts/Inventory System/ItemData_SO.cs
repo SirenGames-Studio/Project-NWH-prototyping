@@ -7,9 +7,11 @@ namespace SGS.Inventory
     [CreateAssetMenu(fileName = "New Item",menuName = "SGS/Inventory/Item")]
     public class ItemData_SO : ScriptableObject
     {
+        public string id;
+
         [Header("Info")]
-        public ItemBehaviour ItemBehaviour;
-        public new string DisplayName;
+        public ItemType ItemBehaviour;
+        public string DisplayName;
         public string Description;
         public Sprite Icon;
         public GameObject DropPrefab;
@@ -20,11 +22,18 @@ namespace SGS.Inventory
         public int MaxStackAmount;
     }
 
-    public enum ItemBehaviour
+    public enum ItemType
     {
         Resource,
         Equipable,
         Consumable,
+    }
+
+    public enum ItemVariety
+    {
+        None,
+        Pickable,
+        Openable
     }
 
 }

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using static GameManager;
+using System;
+using UnityEditor;
 
 public class GameManager : Singleton<GameManager> 
 {
@@ -17,11 +19,13 @@ public class GameManager : Singleton<GameManager>
         SURVIVAL,
         ADVENTURE
     }
+    
 
     public GameObject[] SystemPrefabs;
     public EventGameState OnGameStateChanged;
     public EventGameType OnGameTypeChanged;
     public EventLoadLevel OnLoadLevelChanged;
+    public Events.EventUnloadScene UnloadCurrentScene;
 
     List<GameObject> _instancedSystemPrefabs;
     GameState _currentGameState = GameState.PREGAME; 
@@ -42,6 +46,11 @@ public class GameManager : Singleton<GameManager>
         private set { _currentGameState = value; }
     }
 
+    public bool ChangeToMainMenu = false;  
+    
+    
+  
+
 
     private void Start()
     {
@@ -51,7 +60,18 @@ public class GameManager : Singleton<GameManager>
 
         //UIManager.Instance.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
 
-       // OnGameStateChanged.Invoke(GameState.PREGAME, _currentGameState);
+        // OnGameStateChanged.Invoke(GameState.PREGAME, _currentGameState);
+
+       
+    }
+
+    public void OnClickToMainMenu(bool isClicked)
+    {
+        if (isClicked)
+        {
+            UpdateState(CurrentGameState = GameState.PREGAME);
+            UnloadCurrentScene.Invoke();
+        }
     }
 
     private void Update()

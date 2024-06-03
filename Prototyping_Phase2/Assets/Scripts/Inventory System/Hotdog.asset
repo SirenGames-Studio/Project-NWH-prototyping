@@ -17,5 +17,5 @@ MonoBehaviour:
   Description: Hot for your Dog !!
   Icon: {fileID: 21300000, guid: c2d9e80be85564073abdc0cc14bfe297, type: 3}
   DropPrefab: {fileID: 1202617880259686824, guid: 8fb8eb197770a2440abe43f65aea7b77, type: 3}
-  CanStack: 0
-  MaxStackAmount: 0
+  CanStack: 1
+  MaxStackAmount: 5

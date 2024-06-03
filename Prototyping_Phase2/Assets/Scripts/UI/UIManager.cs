@@ -19,6 +19,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Camera _dummyCamera;
 
     public Events.EventFadeComplete OnMainMenuFadeComplete;
+    public Events.EventToMainMenu OnToMainMenuClicked;
+
+    // behaviour on paused menu
+    public Events.EventToResumeState OnResumeStateChange;
+    public Events.EventToMainMenu OnClickToMainMenu;
 
     private void Start()
     {
@@ -30,6 +35,33 @@ public class UIManager : Singleton<UIManager>
         GameManager.Instance.OnGameTypeChanged.AddListener(HandleGameTypeSystem);
         
         BackBtn.onClick.AddListener(BackClickBehaviour);
+
+        OnResumeStateChange.AddListener(HandleResumeStateChange);
+        OnClickToMainMenu.AddListener(HandleMainMenuClickStatus);
+
+
+        if(PausedGameState == true)
+        {
+            GameManager.Instance.UpdateState(GameManager.GameState.PAUSED);
+        }
+    }
+
+    private void HandleMainMenuClickStatus(bool isClicked)
+    {
+        if(isClicked)
+        {
+           MainMenu.gameObject.SetActive(true);
+           PausedGameState.SetActive(false);
+           GameManager.Instance.OnClickToMainMenu(true);
+        }
+    }
+
+    private void HandleResumeStateChange(bool isResumed)
+    {
+        if(isResumed)
+        {
+            GameManager.Instance.UpdateState(GameManager.GameState.RUNNING);
+        }
     }
 
     private void BackClickBehaviour()
@@ -99,12 +131,10 @@ public class UIManager : Singleton<UIManager>
         if (state == true)
         {
             GameManager.Instance.UpdateState(GameManager.GameState.PAUSED);
-            Debug.Log("game is pause usin state");
         }
         else if (state == false)
         {
             GameManager.Instance.UpdateState(GameManager.GameState.RUNNING);
-            Debug.Log("game is unpaused usin state");
 
         }
     }
