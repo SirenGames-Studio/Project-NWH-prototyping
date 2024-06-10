@@ -5,11 +5,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 namespace SGS.Inventory
 {
 
-    public class Inventory : Singleton<Inventory>
+    public class Inventory : Singleton<Inventory> 
     {
         public ItemSlotUI[] UISlots;
         public ItemSlot[] Slots;
@@ -18,16 +19,19 @@ namespace SGS.Inventory
         public GameObject InventoryWindow;
         public Transform DropPosition;
 
-        [Header("Selected Item")] private ItemSlot SelectedItem;
+        public GameObject ItemPopUpOption;
+
+        [Header("Selected Item")] 
+        private ItemSlot SelectedItem;
         private int _selectedItemIndex;
         [SerializeField] private TextMeshProUGUI selectedItemName;
         [SerializeField] private TextMeshProUGUI selectedItemDescription;
         [SerializeField] private TextMeshProUGUI selectedItemStatName;
         [SerializeField] private TextMeshProUGUI selectedItemStatValues;
-        public GameObject UseButton;
-        public GameObject EquipButton;
-        public GameObject UnEquipButton;
-        public GameObject DropButton;
+      //  public GameObject UseButton;
+      //  public GameObject EquipButton;
+     //   public GameObject UnEquipButton;
+      //  public GameObject DropButton;
 
         private int _curEquipIndex;
 
@@ -133,22 +137,28 @@ namespace SGS.Inventory
 
         public void SelectItem(int index)
         {
+            if(SelectedItem != null)
+            {
+                UISlots[_selectedItemIndex].SetSelected(false);
+            }
             if (Slots[index].ItemData == null)
                 return;
 
             SelectedItem = Slots[index];
             _selectedItemIndex = index;
+            UISlots[index].SetSelected(true);
 
             selectedItemName.text = SelectedItem.ItemData.DisplayName;
             selectedItemDescription.text = SelectedItem.ItemData.Description;
+            Debug.Log(SelectedItem.ItemData.DisplayName.ToString());
 
 
             //set stat value and stat name
 
-            UseButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Consumable);
-            EquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && !UISlots[index].Equipped);
-            UnEquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && UISlots[index].Equipped);
-            DropButton.SetActive(true);
+           // UseButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Consumable);
+           // EquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && !UISlots[index].Equipped);
+           // UnEquipButton.SetActive(SelectedItem.ItemData.ItemBehaviour == ItemType.Equipable && UISlots[index].Equipped);
+           // DropButton.SetActive(true);
 
 
         }
@@ -163,10 +173,10 @@ namespace SGS.Inventory
             selectedItemStatValues.text = string.Empty;
 
             //disable item
-            UseButton.SetActive(false);
-            EquipButton.SetActive(false);
-            UnEquipButton.SetActive(false);
-            DropButton.SetActive(false);
+          //  UseButton.SetActive(false);
+          //  EquipButton.SetActive(false);
+           // UnEquipButton.SetActive(false);
+          //  DropButton.SetActive(false);
         }
 
         public void OnUseButton()
@@ -204,6 +214,37 @@ namespace SGS.Inventory
 
             UpdateUI();
         }
+
+        public void ItemPopUpWindow(Vector2 pos, bool popup)
+        {
+            if(popup == true)
+            {
+                ItemPopUpOption.SetActive(true);
+                Vector3 adjustedPosition = ClampPopupWindowPosition(pos);
+               // ItemPopUpOption.transform.position = pos;
+            } else if(popup == false)
+            {
+                ItemPopUpOption.SetActive(false);
+            }
+                
+        }
+
+        private Vector3 ClampPopupWindowPosition(Vector3 position)
+    {
+        // Get the screen dimensions
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+
+        // Adjust the popup window position to prevent it from going out of screen boundaries
+        float popupWidth = ItemPopUpOption.GetComponent<RectTransform>().rect.width;
+        float popupHeight = ItemPopUpOption.GetComponent<RectTransform>().rect.height;
+
+        float clampedX = Mathf.Clamp(position.x, popupWidth / 2, screenWidth - popupWidth / 2);
+        float clampedY = Mathf.Clamp(position.y, popupHeight / 2, screenHeight - popupHeight / 2);
+
+        // Return the adjusted position
+        return new Vector3(clampedX, clampedY, 0f);
+    }
 
         private void UnEquip(int selectedItemIndex)
         {

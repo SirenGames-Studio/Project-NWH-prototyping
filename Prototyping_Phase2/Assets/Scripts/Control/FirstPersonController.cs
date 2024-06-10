@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using SGS.InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SGS.Saving;
 
 namespace SGS.Controls
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInput))]
-    public class FirstPersonController : MonoBehaviour
+    public class FirstPersonController : MonoBehaviour, ISaveable
     {
         [Header("Player")]
         [SerializeField]
@@ -68,6 +69,17 @@ namespace SGS.Controls
             Vector3 moveDirection = new Vector3(_frameInput.Move.x, 0f, _frameInput.Move.y);
             moveDirection = transform.TransformDirection(moveDirection);
             _playerController.Move(moveDirection * _moveSpeed * Time.deltaTime);
+        }
+
+        public object CaptureState()
+        {
+            return new SerializableVector3(this.transform.position);
+        }
+
+        public void RestoreState(object state)
+        {
+            SerializableVector3 position = (SerializableVector3)state;
+            this.transform.position = position.GetVector3();
         }
     }
 

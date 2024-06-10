@@ -15,8 +15,8 @@ MonoBehaviour:
   id: beans
   ItemBehaviour: 2
   DisplayName: Baked Beans
-  Description: 
-  Icon: {fileID: 0}
+  Description: Beans of the century
+  Icon: {fileID: 2289998852469363648, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
   DropPrefab: {fileID: 0}
-  CanStack: 1
+  CanStack: 0
   MaxStackAmount: 5

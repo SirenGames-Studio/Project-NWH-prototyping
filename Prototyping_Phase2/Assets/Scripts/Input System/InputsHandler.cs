@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Localization.SmartFormat.Utilities;
 
 namespace SGS.InputSystem
 {
-    public class InputsHandler : MonoBehaviour
+    public class InputsHandler : Singleton<InputsHandler>
     {
         public FrameInput FrameInput { get; private set; }
 
@@ -20,9 +22,15 @@ namespace SGS.InputSystem
         private InputAction _inventoryMenu;
         private InputAction _pauseMenu;
         private InputAction _journalSystem;
+        private InputAction _rightClickForItem;
 
-        private void Awake()
+
+        // Events
+        public event Action RightClickEvent;
+
+        protected override void Awake()
         {
+            base.Awake();
             _playerInputActions = new PlayerInputAction();
             _move = _playerInputActions.Player.Move;
             _pickUp = _playerInputActions.Player.Pickup;
@@ -30,9 +38,11 @@ namespace SGS.InputSystem
             _cameraLook = _playerInputActions.Player.Look;
 
             // for UI
-            _inventoryMenu = _playerInputActions.UI.InventoryMenu;
-            _pauseMenu = _playerInputActions.UI.PauseMenu;
-            _journalSystem = _playerInputActions.UI.JournalSystem;
+            _inventoryMenu = _playerInputActions.UserInterface.InventoryMenu;
+            _pauseMenu = _playerInputActions.UserInterface.PauseMenu;
+            _journalSystem = _playerInputActions.UserInterface.JournalSystem;
+            _rightClickForItem = _playerInputActions.UserInterface.ItemOption;
+           
         }
 
         private void OnEnable()
@@ -48,6 +58,10 @@ namespace SGS.InputSystem
         private void Update()
         {
             FrameInput = GatherInput();
+            if(FrameInput.ItemOption) 
+            { 
+                RightClickEvent?.Invoke(); 
+            }
         }
 
         private FrameInput GatherInput()
@@ -57,12 +71,12 @@ namespace SGS.InputSystem
                 Move = _move.ReadValue<Vector2>(),
                 Open = _open.WasPressedThisFrame(),
                 PickUP = _pickUp.WasPressedThisFrame(),
-                CameraLook = _cameraLook.ReadValue<Vector2>().normalized,
+                CameraLook = _cameraLook.ReadValue<Vector2>(),
                 // for UI
                 InventoryMenu = _inventoryMenu.WasPerformedThisFrame(),
                 PauseMenu = _pauseMenu.WasPerformedThisFrame(),
                 JournalSystem = _journalSystem.WasPerformedThisFrame(),
-
+                ItemOption = _rightClickForItem.WasPerformedThisFrame()
             };
         }
     }
@@ -80,5 +94,6 @@ public struct FrameInput
     public bool InventoryMenu;
     public bool PauseMenu;
     public bool JournalSystem;
+    public bool ItemOption;
 }
 

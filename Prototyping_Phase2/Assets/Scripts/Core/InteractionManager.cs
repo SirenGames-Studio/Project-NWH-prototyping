@@ -12,7 +12,7 @@ public class InteractionManager : MonoBehaviour
 {
     [FormerlySerializedAs("RayCastCheckRate")]
     [Header("RayCast Settings")]
-    [SerializeField] private float checkRate = 0.5f;
+    [SerializeField] private float checkRate = 0.1f;
     [SerializeField] private float lastCheckTime;
     [SerializeField] private float maxCheckDistance = 5f;
     [SerializeField] private LayerMask layerMask;

@@ -1,4 +1,6 @@
 using System;
+using SGS.InputSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +26,10 @@ public class PausedStateMenu : MonoBehaviour
     [SerializeField] private GameObject _MainPausedMenu;
 
     [SerializeField] private GameObject _mainMenuTab;
+
+    [Header("Input Settings")]
+    [SerializeField] private InputsHandler _playerInput;
+    private FrameInput _frameInput;
 
 
     private void Start()
@@ -72,7 +78,6 @@ public class PausedStateMenu : MonoBehaviour
     }
 
 
-
     // paused Behavior
 
     #endregion
@@ -82,25 +87,24 @@ public class PausedStateMenu : MonoBehaviour
     {
         if(GameManager.Instance.CurrentGameState == GameManager.GameState.PREGAME) { return; }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            HandlePausedState();
-            UpdatePausedStateCanvas();
-        }
-
-        if(Input.GetKeyDown(KeyCode.I))
+      _frameInput = _playerInput.FrameInput;
+        if(_frameInput.InventoryMenu)
         {
             HandleInventoryState();
             UpdatePausedStateCanvas();
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if(_frameInput.PauseMenu)
         {
-            HandleJournalState();
+            HandlePausedState();
             UpdatePausedStateCanvas();
         }
 
-        
+        if(_frameInput.JournalSystem)
+        {
+             HandleJournalState();
+             UpdatePausedStateCanvas();
+        }
     }
 
     private void HandleJournalState()

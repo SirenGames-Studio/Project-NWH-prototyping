@@ -33024,6 +33024,7 @@ GameObject:
   - component: {fileID: 9216342220348741538}
   - component: {fileID: 7842056110209316557}
   - component: {fileID: 9107959493376995502}
+  - component: {fileID: 6051996421610630114}
   m_Layer: 0
   m_Name: NewFP_PlayerController
   m_TagString: Player
@@ -33193,7 +33194,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867335bd817852449763e49fcf65c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueIdentifier: 
+  uniqueIdentifier: Player
+--- !u!54 &6051996421610630114
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5709585528445559496}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5736716252879965667
 GameObject:
   m_ObjectHideFlags: 0

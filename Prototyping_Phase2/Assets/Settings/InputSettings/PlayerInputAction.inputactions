@@ -27,7 +27,7 @@
                     "name": "Pickup",
                     "type": "Button",
                     "id": "18814d12-7497-4be8-bef1-5109bfb6c0ee",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -40,6 +40,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "06eafc96-ee8a-4525-9a03-4478d93f4601",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Run",
+                    "type": "Button",
+                    "id": "3616bc1d-3002-4b42-8eef-16d0c6165f7f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "97b3a1ab-2209-4390-91e5-7286054980d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -48,7 +75,7 @@
                     "id": "90480895-2777-4bd2-abe2-ff63e7e1ac40",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=9,y=9)",
+                    "processors": "InvertVector2(invertX=false,invertY=false)",
                     "groups": "Mouse&Keyboard",
                     "action": "Look",
                     "isComposite": false,
@@ -59,7 +86,7 @@
                     "id": "7152d4b7-5747-4e08-8433-a07233909b76",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=70,y=70)",
+                    "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=5)",
                     "groups": "Gamepad",
                     "action": "Look",
                     "isComposite": false,
@@ -174,11 +201,44 @@
                     "action": "Open",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4cb6923e-aa62-4318-9fe9-c9ebedacc8c8",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f81711e-c39f-4a09-b05c-303bee75aa9e",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8dc5aaeb-cc25-480e-8c06-b6e3f4ae719d",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
+            "name": "UserInterface",
             "id": "1a9c0f36-e5bc-4ba3-8eed-31fd8d14e25c",
             "actions": [
                 {
@@ -194,7 +254,7 @@
                     "name": "PauseMenu",
                     "type": "Button",
                     "id": "d66d6587-3176-4868-9a1b-7dcc8cd8737c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -203,7 +263,16 @@
                     "name": "JournalSystem",
                     "type": "Button",
                     "id": "d670c2d7-d7b2-4e91-8432-f8c3e6509a3b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ItemOption",
+                    "type": "Button",
+                    "id": "4e931921-05d2-4a42-8970-185051f9e796",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -213,10 +282,21 @@
                 {
                     "name": "",
                     "id": "58061fdd-1685-42b9-b5a1-4da961033b79",
-                    "path": "<Keyboard>/i",
+                    "path": "<Keyboard>/n",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Mouse&Keyboard",
+                    "groups": "Mouse&Keyboard;Gamepad",
+                    "action": "InventoryMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4808f96-231d-411d-bda5-4d22e20aa2a7",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad;Mouse&Keyboard",
                     "action": "InventoryMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -227,7 +307,18 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Mouse&Keyboard;Gamepad",
+                    "action": "PauseMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53e22587-c23f-4a18-b860-2af8a47c2577",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad;Mouse&Keyboard",
                     "action": "PauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -238,8 +329,41 @@
                     "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Mouse&Keyboard;Gamepad",
                     "action": "JournalSystem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5131bf8-e0ee-430b-a8f4-513d250d1ec1",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad;Mouse&Keyboard",
+                    "action": "JournalSystem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5ff4a30-7bec-4dfa-8215-43947a55fb4c",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Mouse&Keyboard",
+                    "action": "ItemOption",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "60ec0a4e-5c71-43b0-8943-e96240b2672c",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ItemOption",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
